@@ -169,7 +169,14 @@
         that.$element.addClass(defaults.showArrowsClass);
       }
     };
-
+	
+	/**
+     * id current item selected
+     *
+     * @private
+     */
+	Plugin.prototype.currentId = 0;
+	
     /**
      * Resize
      *
@@ -181,14 +188,20 @@
 
       var resizeFunction = function resizeFunction() {
         that.setSizes();
-        that._checkPosition();
+        //that._checkPosition();
+		var $item = $(that.$items[0]);
+		var width = $item.outerWidth(true);
+		that.$inner.scrollLeft(width * Plugin.prototype.currentId);
       };
 
       defaults.$window.resize(function () {
-        clearTimeout(resizeTimeout);
+		resizeFunction();
+        /*
+		clearTimeout(resizeTimeout);
         setTimeout(function () {
           resizeFunction();
         }, 250);
+		*/
       });
     };
 
@@ -336,6 +349,8 @@
      * @private
      */
     Plugin.prototype._scrollToId = function (id) {
+	  Plugin.prototype.currentId = id;
+	  
       var that = this;
       var offset = that._getOffsetById(id);
 
